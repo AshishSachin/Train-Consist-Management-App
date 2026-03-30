@@ -1,4 +1,5 @@
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class train_consist_mngmt_app {
 
@@ -7,33 +8,19 @@ public class train_consist_mngmt_app {
         // Step 1: Welcome Message
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 2: Create LinkedList for train consist
-        LinkedList<String> trainConsist = new LinkedList<>();
+        // Step 2: Create HashMap for bogie-capacity mapping
+        HashMap<String, Integer> bogieCapacity = new HashMap<>();
 
-        // Step 3: Add bogies in order
-        trainConsist.add("Engine");
-        trainConsist.add("Sleeper");
-        trainConsist.add("AC");
-        trainConsist.add("Cargo");
-        trainConsist.add("Guard");
+        // Step 3: Insert bogie capacities
+        bogieCapacity.put("Sleeper", 72);
+        bogieCapacity.put("AC Chair", 60);
+        bogieCapacity.put("First Class", 24);
 
-        // Step 4: Insert Pantry Car at position 2
-        trainConsist.add(2, "Pantry Car");
+        // Step 4: Display bogie capacities
+        System.out.println("\nBogie Capacity Details:");
 
-        // Step 5: Display current consist
-        System.out.println("\nTrain Consist after insertion:");
-        for (String bogie : trainConsist) {
-            System.out.println(bogie);
-        }
-
-        // Step 6: Remove first and last bogie
-        trainConsist.removeFirst();
-        trainConsist.removeLast();
-
-        // Step 7: Final consist
-        System.out.println("\nFinal Train Consist:");
-        for (String bogie : trainConsist) {
-            System.out.println(bogie);
+        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
+            System.out.println(entry.getKey() + " -> " + entry.getValue());
         }
     }
 }
