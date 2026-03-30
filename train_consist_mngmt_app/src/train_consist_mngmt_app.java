@@ -10,7 +10,7 @@ public class train_consist_mngmt_app {
         // Step 2: Create LinkedList for train consist
         LinkedList<String> trainConsist = new LinkedList<>();
 
-        // Step 3: Add bogies
+        // Step 3: Add bogies in order
         trainConsist.add("Engine");
         trainConsist.add("Sleeper");
         trainConsist.add("AC");
@@ -20,9 +20,11 @@ public class train_consist_mngmt_app {
         // Step 4: Insert Pantry Car at position 2
         trainConsist.add(2, "Pantry Car");
 
-        // Step 5: Display after insertion
-        System.out.println("\nTrain Consist after adding Pantry Car:");
-        System.out.println(trainConsist);
+        // Step 5: Display current consist
+        System.out.println("\nTrain Consist after insertion:");
+        for (String bogie : trainConsist) {
+            System.out.println(bogie);
+        }
 
         // Step 6: Remove first and last bogie
         trainConsist.removeFirst();
@@ -30,6 +32,8 @@ public class train_consist_mngmt_app {
 
         // Step 7: Final consist
         System.out.println("\nFinal Train Consist:");
-        System.out.println(trainConsist);
+        for (String bogie : trainConsist) {
+            System.out.println(bogie);
+        }
     }
 }
