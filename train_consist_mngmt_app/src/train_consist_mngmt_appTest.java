@@ -5,82 +5,85 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class train_consist_mngmt_appTest {
 
-    // Helper method
     private List<Bogie> createSampleBogies() {
         List<Bogie> list = new ArrayList<>();
         list.add(new Bogie("Sleeper", 72));
+        list.add(new Bogie("Sleeper", 70));
         list.add(new Bogie("AC Chair", 60));
         list.add(new Bogie("First Class", 24));
         return list;
     }
 
     @Test
-    void testFilter_CapacityGreaterThanThreshold() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(createSampleBogies(), 60);
+    void testGrouping_BogiesGroupedByType() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(createSampleBogies());
 
-        assertEquals(1, result.size());
-        assertEquals("Sleeper", result.get(0).name);
+        assertTrue(result.containsKey("Sleeper"));
+        assertEquals(2, result.get("Sleeper").size());
     }
 
     @Test
-    void testFilter_CapacityEqualToThreshold() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(createSampleBogies(), 60);
+    void testGrouping_MultipleBogiesInSameGroup() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(createSampleBogies());
 
-        assertFalse(result.stream().anyMatch(b -> b.capacity == 60));
+        assertEquals(2, result.get("Sleeper").size());
     }
 
     @Test
-    void testFilter_CapacityLessThanThreshold() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(createSampleBogies(), 70);
+    void testGrouping_DifferentBogieTypes() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(createSampleBogies());
 
-        assertTrue(result.stream().allMatch(b -> b.capacity > 70));
+        assertTrue(result.containsKey("AC Chair"));
+        assertTrue(result.containsKey("First Class"));
     }
 
     @Test
-    void testFilter_MultipleBogiesMatching() {
+    void testGrouping_EmptyBogieList() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(new ArrayList<>());
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void testGrouping_SingleBogieCategory() {
         List<Bogie> list = new ArrayList<>();
         list.add(new Bogie("Sleeper", 72));
-        list.add(new Bogie("AC Chair", 65));
-        list.add(new Bogie("First Class", 24));
 
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(list, 60);
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(list);
 
-        assertEquals(2, result.size());
+        assertEquals(1, result.size());
+        assertTrue(result.containsKey("Sleeper"));
     }
 
     @Test
-    void testFilter_NoBogiesMatching() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(createSampleBogies(), 100);
+    void testGrouping_MapContainsCorrectKeys() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(createSampleBogies());
 
-        assertTrue(result.isEmpty());
+        assertTrue(result.containsKey("Sleeper"));
+        assertTrue(result.containsKey("AC Chair"));
+        assertTrue(result.containsKey("First Class"));
     }
 
     @Test
-    void testFilter_AllBogiesMatching() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(createSampleBogies(), 10);
+    void testGrouping_GroupSizeValidation() {
+        Map<String, List<Bogie>> result =
+                train_consist_mngmt_app.groupBogiesByType(createSampleBogies());
 
-        assertEquals(3, result.size());
+        assertEquals(2, result.get("Sleeper").size());
+        assertEquals(1, result.get("AC Chair").size());
     }
 
     @Test
-    void testFilter_EmptyBogieList() {
-        List<Bogie> result =
-                train_consist_mngmt_app.filterBogiesByCapacity(new ArrayList<>(), 50);
-
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void testFilter_OriginalListUnchanged() {
+    void testGrouping_OriginalListUnchanged() {
         List<Bogie> original = createSampleBogies();
-        train_consist_mngmt_app.filterBogiesByCapacity(original, 60);
+        train_consist_mngmt_app.groupBogiesByType(original);
 
-        assertEquals(3, original.size());
+        assertEquals(4, original.size());
     }
 }

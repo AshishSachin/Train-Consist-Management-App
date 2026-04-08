@@ -14,11 +14,10 @@ class Bogie {
 
 public class train_consist_mngmt_app {
 
-    // Filter method using Stream
-    public static List<Bogie> filterBogiesByCapacity(List<Bogie> bogies, int threshold) {
+    // Group bogies by type (name)
+    public static Map<String, List<Bogie>> groupBogiesByType(List<Bogie> bogies) {
         return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .collect(Collectors.toList());
+                .collect(Collectors.groupingBy(b -> b.name));
     }
 
     public static void main(String[] args) {
@@ -27,14 +26,15 @@ public class train_consist_mngmt_app {
 
         List<Bogie> bogies = new ArrayList<>();
         bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("Sleeper", 70));
         bogies.add(new Bogie("AC Chair", 60));
         bogies.add(new Bogie("First Class", 24));
 
-        List<Bogie> filtered = filterBogiesByCapacity(bogies, 60);
+        Map<String, List<Bogie>> grouped = groupBogiesByType(bogies);
 
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        for (Bogie b : filtered) {
-            System.out.println(b.name + " -> " + b.capacity);
+        System.out.println("\nGrouped Bogies:");
+        for (String key : grouped.keySet()) {
+            System.out.println(key + " -> " + grouped.get(key).size() + " bogies");
         }
     }
 }
