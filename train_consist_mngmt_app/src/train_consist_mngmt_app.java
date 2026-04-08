@@ -1,39 +1,38 @@
-import java.util.regex.Pattern;
+import java.util.*;
 
-// Bogie class (keep if already present in your file)
-class Bogie {
-    String name;
-    int capacity;
+// Goods Bogie class
+class GoodsBogie {
+    String type;
+    String cargo;
 
-    Bogie(String name, int capacity) {
-        this.name = name;
-        this.capacity = capacity;
+    GoodsBogie(String type, String cargo) {
+        this.type = type;
+        this.cargo = cargo;
     }
 }
 
 public class train_consist_mngmt_app {
 
-    // Validate Train ID (TRN-1234)
-    public static boolean isValidTrainID(String trainID) {
-        return Pattern.matches("TRN-\\d{4}", trainID);
-    }
-
-    // Validate Cargo Code (PET-AB)
-    public static boolean isValidCargoCode(String cargoCode) {
-        return Pattern.matches("PET-[A-Z]{2}", cargoCode);
+    // Safety validation method
+    public static boolean isTrainSafe(List<GoodsBogie> bogies) {
+        return bogies.stream()
+                .allMatch(b ->
+                        !b.type.equals("Cylindrical") ||
+                                b.cargo.equals("Petroleum")
+                );
     }
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        String trainID = "TRN-1234";
-        String cargoCode = "PET-AB";
+        List<GoodsBogie> bogies = new ArrayList<>();
+        bogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
+        bogies.add(new GoodsBogie("Open", "Coal"));
+        bogies.add(new GoodsBogie("Box", "Grain"));
 
-        System.out.println("\nTrain ID: " + trainID + " -> " +
-                (isValidTrainID(trainID) ? "Valid" : "Invalid"));
+        boolean safe = isTrainSafe(bogies);
 
-        System.out.println("Cargo Code: " + cargoCode + " -> " +
-                (isValidCargoCode(cargoCode) ? "Valid" : "Invalid"));
+        System.out.println("\nTrain Safety Status: " + (safe ? "SAFE" : "UNSAFE"));
     }
 }
