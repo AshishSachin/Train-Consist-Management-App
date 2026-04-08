@@ -1,6 +1,6 @@
-import java.util.*;
+import java.util.regex.Pattern;
 
-// Bogie class
+// Bogie class (keep if already present in your file)
 class Bogie {
     String name;
     int capacity;
@@ -13,24 +13,27 @@ class Bogie {
 
 public class train_consist_mngmt_app {
 
-    // Method to calculate total capacity using reduce
-    public static int calculateTotalCapacity(List<Bogie> bogies) {
-        return bogies.stream()
-                .map(b -> b.capacity)
-                .reduce(0, Integer::sum);
+    // Validate Train ID (TRN-1234)
+    public static boolean isValidTrainID(String trainID) {
+        return Pattern.matches("TRN-\\d{4}", trainID);
+    }
+
+    // Validate Cargo Code (PET-AB)
+    public static boolean isValidCargoCode(String cargoCode) {
+        return Pattern.matches("PET-[A-Z]{2}", cargoCode);
     }
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        List<Bogie> bogies = new ArrayList<>();
-        bogies.add(new Bogie("Sleeper", 72));
-        bogies.add(new Bogie("AC Chair", 60));
-        bogies.add(new Bogie("First Class", 24));
+        String trainID = "TRN-1234";
+        String cargoCode = "PET-AB";
 
-        int total = calculateTotalCapacity(bogies);
+        System.out.println("\nTrain ID: " + trainID + " -> " +
+                (isValidTrainID(trainID) ? "Valid" : "Invalid"));
 
-        System.out.println("\nTotal Seating Capacity: " + total);
+        System.out.println("Cargo Code: " + cargoCode + " -> " +
+                (isValidCargoCode(cargoCode) ? "Valid" : "Invalid"));
     }
 }
