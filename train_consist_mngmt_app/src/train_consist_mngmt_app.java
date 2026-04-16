@@ -2,12 +2,26 @@ import java.util.Arrays;
 
 public class train_consist_mngmt_app {
 
-    // Linear Search method
-    public static boolean linearSearch(String[] bogieIDs, String key) {
+    // Binary Search method
+    public static boolean binarySearch(String[] bogieIDs, String key) {
 
-        for (String id : bogieIDs) {
-            if (id.equals(key)) {
-                return true; // found → stop early
+        // Ensure array is sorted
+        Arrays.sort(bogieIDs);
+
+        int low = 0;
+        int high = bogieIDs.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int comparison = bogieIDs[mid].compareTo(key);
+
+            if (comparison == 0) {
+                return true; // found
+            } else if (comparison < 0) {
+                low = mid + 1; // search right
+            } else {
+                high = mid - 1; // search left
             }
         }
 
@@ -18,13 +32,16 @@ public class train_consist_mngmt_app {
 
         System.out.println("=== Train Consist Management App ===");
 
-        String[] bogieIDs = {"BG101","BG205","BG309","BG412","BG550"};
-        String searchKey = "BG309";
+        String[] bogieIDs = {"BG309","BG101","BG550","BG205","BG412"};
+        String searchKey = "BG205";
 
-        System.out.println("\nBogie List:");
+        System.out.println("\nBefore Sorting:");
         System.out.println(Arrays.toString(bogieIDs));
 
-        boolean found = linearSearch(bogieIDs, searchKey);
+        boolean found = binarySearch(bogieIDs, searchKey);
+
+        System.out.println("\nAfter Sorting:");
+        System.out.println(Arrays.toString(bogieIDs));
 
         System.out.println("\nSearching for: " + searchKey);
         System.out.println(found ? "Bogie Found ✅" : "Bogie Not Found ❌");
