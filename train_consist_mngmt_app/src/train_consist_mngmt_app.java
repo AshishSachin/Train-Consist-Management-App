@@ -2,48 +2,50 @@ import java.util.Arrays;
 
 public class train_consist_mngmt_app {
 
-    // Binary Search method
-    public static boolean binarySearch(String[] bogieIDs, String key) {
+    // Search with validation
+    public static boolean safeSearch(String[] bogieIDs, String key) {
 
-        // Ensure array is sorted
-        Arrays.sort(bogieIDs);
+        // Fail-fast check
+        if (bogieIDs == null || bogieIDs.length == 0) {
+            throw new IllegalStateException("No bogies available for search");
+        }
 
-        int low = 0;
-        int high = bogieIDs.length - 1;
-
-        while (low <= high) {
-            int mid = (low + high) / 2;
-
-            int comparison = bogieIDs[mid].compareTo(key);
-
-            if (comparison == 0) {
-                return true; // found
-            } else if (comparison < 0) {
-                low = mid + 1; // search right
-            } else {
-                high = mid - 1; // search left
+        // Linear search logic
+        for (String id : bogieIDs) {
+            if (id.equals(key)) {
+                return true;
             }
         }
 
-        return false; // not found
+        return false;
     }
 
     public static void main(String[] args) {
 
         System.out.println("=== Train Consist Management App ===");
 
-        String[] bogieIDs = {"BG309","BG101","BG550","BG205","BG412"};
-        String searchKey = "BG205";
+        String[] bogieIDs = {"BG101","BG205","BG309"};
 
-        System.out.println("\nBefore Sorting:");
-        System.out.println(Arrays.toString(bogieIDs));
+        try {
+            boolean found = safeSearch(bogieIDs, "BG205");
 
-        boolean found = binarySearch(bogieIDs, searchKey);
+            System.out.println("\nBogie List:");
+            System.out.println(Arrays.toString(bogieIDs));
 
-        System.out.println("\nAfter Sorting:");
-        System.out.println(Arrays.toString(bogieIDs));
+            System.out.println("\nSearching for BG205:");
+            System.out.println(found ? "Found ✅" : "Not Found ❌");
 
-        System.out.println("\nSearching for: " + searchKey);
-        System.out.println(found ? "Bogie Found ✅" : "Bogie Not Found ❌");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        // Example empty case
+        String[] empty = {};
+
+        try {
+            safeSearch(empty, "BG101");
+        } catch (IllegalStateException e) {
+            System.out.println("\nError: " + e.getMessage());
+        }
     }
 }
