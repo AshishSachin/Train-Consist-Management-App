@@ -1,49 +1,50 @@
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class train_consist_mngmt_appTest {
 
     @Test
-    void testCargo_SafeAssignment() {
-        GoodsBogie b = new GoodsBogie("Cylindrical");
-        b.assignCargo("Petroleum");
+    void testSort_BasicSorting() {
+        int[] arr = {72, 56, 24, 70, 60};
 
-        assertEquals("Petroleum", b.cargo);
+        train_consist_mngmt_app.bubbleSort(arr);
+
+        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, arr);
     }
 
     @Test
-    void testCargo_UnsafeAssignmentHandled() {
-        GoodsBogie b = new GoodsBogie("Rectangular");
-        b.assignCargo("Petroleum");
+    void testSort_AlreadySortedArray() {
+        int[] arr = {24, 56, 60, 70, 72};
 
-        assertNull(b.cargo); // should not be assigned
+        train_consist_mngmt_app.bubbleSort(arr);
+
+        assertArrayEquals(new int[]{24, 56, 60, 70, 72}, arr);
     }
 
     @Test
-    void testCargo_CargoNotAssignedAfterFailure() {
-        GoodsBogie b = new GoodsBogie("Rectangular");
-        b.assignCargo("Petroleum");
+    void testSort_DuplicateValues() {
+        int[] arr = {72, 56, 56, 24};
 
-        assertNull(b.cargo);
+        train_consist_mngmt_app.bubbleSort(arr);
+
+        assertArrayEquals(new int[]{24, 56, 56, 72}, arr);
     }
 
     @Test
-    void testCargo_ProgramContinuesAfterException() {
-        GoodsBogie b = new GoodsBogie("Rectangular");
+    void testSort_SingleElementArray() {
+        int[] arr = {50};
 
-        b.assignCargo("Petroleum"); // fails
-        b.assignCargo("Coal");      // should work
+        train_consist_mngmt_app.bubbleSort(arr);
 
-        assertEquals("Coal", b.cargo);
+        assertArrayEquals(new int[]{50}, arr);
     }
 
     @Test
-    void testCargo_FinallyBlockExecution() {
-        GoodsBogie b = new GoodsBogie("Rectangular");
+    void testSort_AllEqualValues() {
+        int[] arr = {40, 40, 40};
 
-        // We can't directly assert print statements,
-        // but we ensure method executes without crash
-        assertDoesNotThrow(() -> b.assignCargo("Petroleum"));
+        train_consist_mngmt_app.bubbleSort(arr);
+
+        assertArrayEquals(new int[]{40, 40, 40}, arr);
     }
 }
